@@ -1,3 +1,21 @@
+import importlib.util
+from subprocess import run
+
+# Check if pip is installed
+if importlib.util.find_spec("pip") is None:
+    # Download the get-pip.py script
+    run(["curl", "https://bootstrap.pypa.io/get-pip.py", "-o", "get-pip.py"])
+    # Install pip using the get-pip.py script
+    run(["python", "get-pip.py"])
+
+if importlib.util.find_spec("pyotp") is None:
+    # Install the package using pip
+    run(["pip", "install", "pyotp"])
+
+if importlib.util.find_spec("qrcode") is None:
+    # Install the package using pip
+    run(["pip", "install", "qrcode"])
+
 import pyotp
 import qrcode
 
