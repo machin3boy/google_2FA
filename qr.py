@@ -1,29 +1,39 @@
 import pyotp
 import qrcode
 
-# Generate a secret key
-secret_key = pyotp.random_base32()
+def random_secret():
+    return pyotp.random_base32()
 
-# Store the secret key in your database and associate it with the user's account
+def totp(secret_key):
+    # Generate a time-based one-time password (TOTP)
+    totp = pyotp.TOTP(secret_key)
 
-# Generate a time-based one-time password (TOTP)
-totp = pyotp.TOTP(secret_key)
+    return totp
 
-# Generate a provisioning URI that contains the secret key
-provisioning_uri = totp.provisioning_uri("example@example.com", issuer_name="Example")
+def qr_object(uri):
+    qr = qrcode.make(uri)
 
-# Generate a QR code image from the provisioning URI
-qr = qrcode.make(provisioning_uri)
+    return qr
 
-# Display the QR code image to the user so that they can scan it using the Google Authenticator app
-qr.show()
+def show_qr(qr_object):
+    qr_object.show()
 
-# Prompt the user to enter the TOTP from the Google Authenticator app
-user_totp = input("Enter the TOTP from the Google Authenticator app: ")
+def prompt_totp():
+    user_totp = input("Enter the TOTP from the Google Authenticator app: ")
+    return user_totp
 
-# Verify the TOTP
-if totp.verify(user_totp):
-    print("TOTP verified successfully!")
-else:
-    print("Invalid TOTP!")
+def verify_totp(totp_obj, user_totp):
+    if totp_obj.verify(user_totp):
+        print("TOTP verified successfully!")
+    else:
+        print("Invalid TOTP!")
+       
+if __name__=="__main__":
+    totp_obj = totp(random_secret())
+    #generate a URI for a QR code
+    provisioning_uri = totp_obj.provisioning_uri("example@example.com", issuer_name="example")
+    qr_obj = qr_object(provisioning_uri)
+    show_qr(qr_obj)
+    user_totp = prompt_totp()
+    verify_totp(totp_obj, user_totp)
 
