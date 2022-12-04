@@ -31,7 +31,7 @@ def verify_totp(totp_obj, user_totp):
 if __name__=="__main__":
     totp_obj = totp(random_secret())
     #generate a URI for a QR code
-    provisioning_uri = totp_obj.provisioning_uri("example@example.com", issuer_name="example")
+    provisioning_uri = totp_obj.provisioning_uri("example issuer")
     qr_obj = qr_object(provisioning_uri)
     show_qr(qr_obj)
     user_totp = prompt_totp()
